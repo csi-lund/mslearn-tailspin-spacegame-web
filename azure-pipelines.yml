@@ -45,6 +45,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
+  condition: and (succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'master'))
   inputs:
     SonarCloud: 'AZ-400 Sonarcloud'
     organization: '$(SonarOrganization)'
@@ -58,7 +59,6 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
-  condition: and (succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'master'))
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
